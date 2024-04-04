@@ -9,13 +9,14 @@ import { App } from './App';
  */
 test('App should render', () => {
   render(<App />);
-
   expect(screen.getByText('Welcome, party people!')).toBeInTheDocument();
+  
 });
 
+// Verify two buttons render
 test('Button should render', () => {
-  // TODO: change the expect to actually test something 😉
-  expect('no test written').toBe('tested');
+  render(<App />);
+  expect(screen.getAllByRole('button').length).toBe(2);
 });
 
 /**
@@ -23,16 +24,20 @@ test('Button should render', () => {
  * hint: use fireEvent.click(element) to trigger a click event on an element
  */
 test('theme button should update button text', () => {
-  // TODO: change the expect to actually test something 😉
-  expect('no test written').toBe('tested');
+  render(<App />);
+  let btn = screen.getAllByRole('button')[0]
+  fireEvent.click(btn)
+  expect(btn.textContent).toBe('Current theme: dark');
 });
 
 // BONUS
 // hint: there is a `.toHaveStyle` method.
 // e.g.: expect(element).toHaveStyle('color: #FFF');
 test('theme button should toggle styles', () => {
-  // TODO: change the expect to actually test something 😉
-  expect('no test written').toBe('tested');
+  const {container} = render(<App />);
+  let body = container.querySelector('.container').parentElement.parentElement
+  fireEvent.click(screen.getAllByRole('button')[0])
+  expect(body).toHaveStyle('color: #FFF')
 });
 
 /**
@@ -45,8 +50,12 @@ test('theme button should toggle styles', () => {
  * (getByText will throw an error if it is not rendered)
  */
 test('hidden button should toggle hidden content', () => {
-  // TODO: change the expect to actually test something 😉
-  expect('no test written').toBe('tested');
+  render(<App />);
+  let btn = screen.getAllByRole('button')[1]
+  fireEvent.click(btn)
+  expect(screen.queryByText('this content is hidden by default')).toBeInTheDocument();
+  fireEvent.click(btn)
+  expect(screen.queryByText('this content is hidden by default')).not.toBeInTheDocument();
 });
 
 
